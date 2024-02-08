@@ -1,0 +1,47 @@
+{
+    "name": "fastify-drizzle-v2",
+    "version": "0.1.0",
+    "description": "Effortless Typescript error handling",
+    "license": "MIT",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "exports": "./index.js",
+    "scripts": {
+        "build": "./scripts/build.sh",
+        "buildTarball": "rm -rf *.tgz && pnpm run build && cd dist && npm pack && cd .. && mv dist/fastify-drizzle-v2-*.tgz fastify-drizzle-v2.tgz",
+        "buildPackage": "rm -rf package && pnpm run build && cd dist && npm pack && tar -xzvf fastify-drizzle-v2-*.tgz && rm -rf fastify-drizzle-v2-*.tgz && cd .. && mv dist/package package",
+        "publish:dry-run": "rm -rf package *.tgz dist && pnpm run build && cd dist && npm publish --dry-run && cd ..",
+        "publish": "rm -rf package *.tgz dist && pnpm run build && cd dist && npm publish --access public && cd .."
+    },
+    "author": "Surya Venkatesh <https://github.com/surya-ven>",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/surya-ven/fastify-drizzle-v2.git"
+    },
+    "dependencies": {
+        "@neondatabase/serverless": "^0.5.2",
+        "drizzle-orm": "^0.27.0",
+        "fastify": "^4.18.0",
+        "fastify-plugin": "^4.5.0",
+        "pg": "^8.11.0",
+        "postgres": "^3.3.5"
+    },
+    "devDependencies": {
+        "@tsconfig/strictest": "^2.0.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.3.3"
+    },
+    "keywords": [
+        "ts",
+        "typescript",
+        "variant",
+        "result",
+        "future",
+        "match",
+        "ok",
+        "error",
+        "light",
+        "simple",
+        "zero"
+    ]
+}

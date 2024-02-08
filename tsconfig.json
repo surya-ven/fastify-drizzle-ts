@@ -1,0 +1,19 @@
+{
+    "extends": [
+        "@tsconfig/strictest/tsconfig.json"
+        // "@tsconfig/esm/tsconfig.json"
+    ],
+    "include": ["src", "README.ts"],
+    "compilerOptions": {
+        "noEmit": true,
+        "skipLibCheck": false,
+        "target": "esnext",
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "paths": {
+            "fastify-drizzle-v2": ["./src/index.ts"]
+        }
+    }
+}
