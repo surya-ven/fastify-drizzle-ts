@@ -112,7 +112,6 @@ const getConnector = async (opts: Options): Promise<any> => {
 // Change the return type to include more connectors return
 // types when they are added
 const deriveConnector = async (opts: Options): Promise<PGJSConnectors> => {
-    console.log("Original");
     await validateOptions(opts);
     return getConnector(opts);
 };

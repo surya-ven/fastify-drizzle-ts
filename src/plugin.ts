@@ -1,13 +1,16 @@
+import { DrizzleConfig } from "drizzle-orm";
 import { deriveConnector } from "./utils/index.js";
 import { FastifyPluginAsync } from "fastify";
 
 const QUERY_ALIAS = "drizzle";
-const MIGRATION_ALIAS = "drizzleMigration";
+const MIGRATION_ALIAS = "migrate";
 
 export interface FastifyDrizzleOptions {
     connectionString: string;
     connector: string;
+    drizzleConfig?: DrizzleConfig<any>;
     migrationClient?: boolean;
+    migrationConfig?: DrizzleConfig<any>;
     queryClientAlias?: string;
     migrationClientAlias?: string;
     isPool?: boolean;
@@ -18,7 +21,6 @@ export const plugin: FastifyPluginAsync<FastifyDrizzleOptions> =
         try {
             const connectors = await deriveConnector(opts);
             const queryClientAlias = opts.queryClientAlias || QUERY_ALIAS;
-            // instance.log.info(`connectors 2: ${JSON.stringify(connectors)}`)
 
             instance
                 .decorate(queryClientAlias, connectors.queryHandler)
@@ -26,9 +28,6 @@ export const plugin: FastifyPluginAsync<FastifyDrizzleOptions> =
                     const queryClient = (instance as any)[queryClientAlias]
                         .session?.client;
                     if (queryClient && typeof queryClient.end === "function") {
-                        instance.log.info(
-                            `Drizzle query client is disconnecting`
-                        );
                         queryClient.end();
                     }
                 });
@@ -52,12 +51,12 @@ export const plugin: FastifyPluginAsync<FastifyDrizzleOptions> =
                         migrationClient &&
                         typeof migrationClient.end === "function"
                     ) {
-                        instance.log.info(
-                            `Drizzle migration client is disconnecting`
-                        );
                         migrationClient.end();
                     }
                 });
+            instance.log.info(
+                `Migration client available at ${instance[migrationClientAlias]} called ${migrationClientAlias}`
+            );
         } catch (err) {
             const message =
                 err instanceof Error

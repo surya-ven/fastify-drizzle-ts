@@ -4,25 +4,28 @@ import postgres from "postgres";
 import { connectorInitializationErrorMessage } from "../utils/index.js";
 import { FastifyDrizzleOptions } from "../plugin.js";
 
-export type PGJSClient = PostgresJsDatabase<Record<string, never>>;
 export type PGJSConnectors = {
-    migrationHandler: PGJSClient | undefined;
-    queryHandler: PGJSClient;
+    migrationHandler: PostgresJsDatabase | undefined;
+    queryHandler: PostgresJsDatabase;
 };
 
 // Convert the module export to TypeScript with type annotations and ESM syntax
 export default async (opts: FastifyDrizzleOptions): Promise<PGJSConnectors> => {
     try {
         const queryClient = postgres(opts.connectionString);
-        console.log("queryClient opts", opts);
-        const queryHandler = drizzle(queryClient);
-        let migrationHandler: PGJSClient | undefined = undefined;
+        const queryHandler = drizzle<(typeof opts.drizzleConfig)["schema"]>(
+            queryClient,
+            opts.drizzleConfig || {}
+        );
+        let migrationHandler: PostgresJsDatabase | undefined = undefined;
         if (opts.migrationClient) {
             const migrationClient = postgres(opts.connectionString, { max: 1 });
-            migrationHandler = drizzle(migrationClient);
+            migrationHandler = drizzle<(typeof opts.migrationConfig)["schema"]>(
+                migrationClient,
+                opts.migrationConfig || opts.drizzleConfig || {}
+            );
             return { migrationHandler, queryHandler };
         }
-        // console.log(`queryHandler: ${JSON.stringify(queryHandler)}`);
         return { migrationHandler, queryHandler };
     } catch (err) {
         // Assuming err is of type any since its specific structure is not detailed

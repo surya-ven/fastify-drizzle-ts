@@ -6,13 +6,13 @@
 // const t = require("tap");
 import Fastify, { FastifyPluginAsync } from "fastify";
 import tap from "tap";
-import type { PGJSClient } from "../src/connectors/postgresjs.js";
 import { FastifyDrizzleOptions } from "../src/plugin.js";
+import { PostgresJsDatabase } from "drizzle-orm/postgres-js/index.js";
 
 declare module "fastify" {
     export interface FastifyInstance {
-        drizzle?: PGJSClient;
-        dbMigrate?: PGJSClient;
+        drizzle?: PostgresJsDatabase;
+        dbMigrate?: PostgresJsDatabase;
         [key: string]: any; // Allows dynamic decorations like "foo" here
     }
 }
@@ -80,7 +80,6 @@ test("index.js", async (t) => {
 
     await t.test("registering failed", async (t) => {
         t.plan(1);
-        console.log("Test In question");
 
         const fastify = Fastify();
 
@@ -89,8 +88,7 @@ test("index.js", async (t) => {
         >("../src/plugin.js", {
             // File that includes the import statement here
             "./utils/index.js": {
-                deriveConnector: async (opts: any) => {
-                    console.log("I am failing");
+                deriveConnector: async () => {
                     throw new Error();
                 },
             },
