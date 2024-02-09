@@ -7,7 +7,7 @@ tsc --project tsconfig.build.json
 mkdir -p dist
 
 # package
-cp package.json LICENSE README.md dist
+cp package.json LICENSE README.md NOTICE.md dist
 (cd dist && npm pkg delete scripts)
 (cd dist && npm pkg delete devDependencies)
 (cd dist && npm pkg delete files)

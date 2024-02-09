@@ -13,17 +13,11 @@ declare module "fastify" {
     export interface FastifyInstance {
         drizzle?: PGJSClient;
         dbMigrate?: PGJSClient;
-        [key: string]: any; // Allows dynamic decorations like "foo"
+        [key: string]: any; // Allows dynamic decorations like "foo" here
     }
 }
 
 const { test, teardown } = tap;
-
-// Setup and teardown logic
-const cleanup = () => {
-    const fastify = Fastify();
-    teardown(() => fastify.close());
-};
 
 test("index.js", async (t) => {
     await t.test("registering succeeded", async (t) => {
@@ -92,7 +86,8 @@ test("index.js", async (t) => {
 
         const { default: fastifyDrizzle } = await t.mockImport<
             typeof import("../src/index.js")
-        >("../src/plugin.js", { // File that includes the import statement here
+        >("../src/plugin.js", {
+            // File that includes the import statement here
             "./utils/index.js": {
                 deriveConnector: async (opts: any) => {
                     console.log("I am failing");

@@ -1,5 +1,5 @@
 {
-    "name": "fastify-drizzle-v2",
+    "name": "fastify-drizzle-ts",
     "version": "0.1.0",
     "description": "Effortless drizzle integration into Fastify - now with Typecsript support + more",
     "license": "MIT",
@@ -7,17 +7,18 @@
     "types": "index.d.ts",
     "exports": "./index.js",
     "scripts": {
+        "prepack": "proper-attribution && ./scripts/build.sh",
         "build": "./scripts/build.sh",
-        "buildTarball": "rm -rf *.tgz && pnpm run build && cd dist && npm pack && cd .. && mv dist/fastify-drizzle-v2-*.tgz fastify-drizzle-v2.tgz",
-        "buildPackage": "rm -rf package && pnpm run build && cd dist && npm pack && tar -xzvf fastify-drizzle-v2-*.tgz && rm -rf fastify-drizzle-v2-*.tgz && cd .. && mv dist/package package",
+        "buildTarball": "rm -rf *.tgz && pnpm run build && cd dist && npm pack && cd .. && mv dist/fastify-drizzle-ts-*.tgz fastify-drizzle-ts.tgz",
+        "buildPackage": "rm -rf package && pnpm run build && cd dist && npm pack && tar -xzvf fastify-drizzle-ts-*.tgz && rm -rf fastify-drizzle-ts-*.tgz && cd .. && mv dist/package package",
         "publish:dry-run": "rm -rf package *.tgz dist && pnpm run build && cd dist && npm publish --dry-run && cd ..",
         "publish": "rm -rf package *.tgz dist && pnpm run build && cd dist && npm publish --access public && cd ..",
-        "test": "dotenv -- ./scripts/build.sh && tap run test"
+        "test": "tap run test"
     },
     "author": "Surya Venkatesh <https://github.com/surya-ven>",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/surya-ven/fastify-drizzle-v2.git"
+        "url": "git+https://github.com/surya-ven/fastify-drizzle-ts.git"
     },
     "type": "module",
     "dependencies": {
@@ -34,6 +35,8 @@
         "@tsconfig/strictest": "^2.0.2",
         "@types/node": "^20.11.16",
         "dotenv-cli": "^7.3.0",
+        "fastify-drizzle": "^1.0.5",
+        "proper-attribution": "^1.0.1",
         "tap": "^18.7.0",
         "ts-node": "^10.9.2",
         "tsc-esm-fix": "^2.20.23",

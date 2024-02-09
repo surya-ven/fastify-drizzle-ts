@@ -4,7 +4,7 @@ import type { FastifyDrizzleOptions as _FastifyDrizzleOptions } from "./plugin.j
 import type { PGJSClient as _PGJSClient } from "./connectors/postgresjs.js";
 
 export const fastifyDrizzle = fp(plugin, {
-    name: "fastify-drizzle-v2",
+    name: "fastify-drizzle-ts",
     fastify: ">=3",
 });
 
