@@ -64,8 +64,10 @@ profile*
 # generated code
 examples/typescript-server.js
 test/types/index.js
+src/test.ts
 
 # compiled app
 dist
 package
 *.tgz
+.tap/

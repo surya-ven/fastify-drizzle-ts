@@ -1,19 +1,15 @@
 {
-    "extends": [
-        "@tsconfig/strictest/tsconfig.json"
-        // "@tsconfig/esm/tsconfig.json"
-    ],
-    "include": ["src", "README.ts"],
+    "include": ["src"],
     "compilerOptions": {
         "noEmit": true,
-        "skipLibCheck": false,
+        "skipLibCheck": true,
         "target": "esnext",
         "module": "nodenext",
         "moduleResolution": "nodenext",
         "allowSyntheticDefaultImports": true,
         "esModuleInterop": true,
         "paths": {
-            "fastify-drizzle-v2": ["./src/index.ts"]
+            "zeturn": ["./src/index.ts"]
         }
     }
 }

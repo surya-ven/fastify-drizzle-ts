@@ -1,6 +1,7 @@
 // Importing modules with ESM syntax
 import path from "path";
-import fs from "fs/promises";
+import { promises as fs } from "fs";
+import { PGJSConnectors } from "../connectors/postgresjs.js";
 
 // Define the type for options
 interface Options {
@@ -17,10 +18,22 @@ interface RequiredOption {
 
 // Convert async functions and other functions to TypeScript with type annotations
 const getAvailableConnectors = async (): Promise<string[]> => {
-    const connectorsDir = path.join(__dirname, "../connectors");
-    const connectors = (await fs.readdir(connectorsDir)).map(
-        (connector) => connector.split(".")[0]
+    const connectorsDir = path.join(
+        `${process.platform === "win32" ? "" : "/"}${
+            /file:\/{2,3}(.+)\/[^/]/.exec(import.meta.url)![1]
+        }`,
+        "../connectors"
     );
+    const connectors = (await fs.readdir(connectorsDir)).map((connector) => {
+        const fileName = connector.split(".")[0];
+        if (!fileName || fileName === "") {
+            throw new Error("Invalid connector file name");
+        }
+        return fileName;
+    });
+    if (!connectors || connectors.length === 0) {
+        throw new Error("No connectors found");
+    }
     return connectors;
 };
 
@@ -89,11 +102,17 @@ const validateOptions = async (opts: Options): Promise<void> => {
 };
 
 const getConnector = async (opts: Options): Promise<any> => {
-    const connectorModule = await import(`../connectors/${opts.connector}`);
+    const connectorModule = await import(`../connectors/${opts.connector}.js`);
+    if (!connectorModule.default) {
+        throw new Error(connectorInitializationErrorMessage(opts.connector));
+    }
     return connectorModule.default(opts);
 };
 
-const deriveConnector = async (opts: Options): Promise<any> => {
+// Change the return type to include more connectors return
+// types when they are added
+const deriveConnector = async (opts: Options): Promise<PGJSConnectors> => {
+    console.log("Original");
     await validateOptions(opts);
     return getConnector(opts);
 };
